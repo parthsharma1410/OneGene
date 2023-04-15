@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Home from "./Home";
 import About from "./About";
 import Navigation from "./Navbar";
+import InventoryStatus from "./InventoryStatus";
+import SafetyStock from "./SafetyStock";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Routes>
             <Route exact path='/' element={<Home />} />
             <Route path='/about' element={<About />} />
+            <Route exact path='/istatus' element={<InventoryStatus />} />
+            <Route path='/stock' element={<SafetyStock />} />
           </Routes>
       </Router>
       {/* </div> */}
