@@ -6,6 +6,7 @@ import About from "./About";
 import Navigation from "./Navbar";
 import InventoryStatus from "./InventoryStatus";
 import SafetyStock from "./SafetyStock";
+import Data from "./Data";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path='/about' element={<About />} />
             <Route exact path='/istatus' element={<InventoryStatus />} />
             <Route path='/stock' element={<SafetyStock />} />
+            <Route path='/data' element={<Data />} />
           </Routes>
       </Router>
       {/* </div> */}

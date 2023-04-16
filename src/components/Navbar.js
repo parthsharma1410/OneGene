@@ -44,6 +44,7 @@ function Navigation() {
           <Nav.Link className="pad1" href="/about">About</Nav.Link>
           <Nav.Link className="pad1" href="/istatus">Inventory Status</Nav.Link>
           <Nav.Link className="pad1" href="/stock">Safety Stock</Nav.Link>
+          <Nav.Link className="pad1" href="/data">Data</Nav.Link>
           {/* <Nav.Link href="/help">Help</Nav.Link> */}
         </Nav>
         <img className="image2 marg1" src={logo} />
