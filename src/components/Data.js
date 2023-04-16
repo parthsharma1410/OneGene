@@ -88,7 +88,7 @@ const Data = () => {
                                     ))
                                     :
                                     <tr>
-                                        <td colSpan="5" className="text-center">No Movies Found.</td>
+                                        <td colSpan="5" className="text-center">No Data Found.</td>
                                     </tr> 
                                 }
                         </tbody>
