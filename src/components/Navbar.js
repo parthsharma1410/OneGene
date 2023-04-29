@@ -1,56 +1,45 @@
-import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert, Navbar, Nav } from "react-bootstrap";
-// import { useAuth } from "../context/AuthContext";
-import { Link, useHistory } from "react-router-dom";
-import "../../src/App.css";
-import logo from "../logo.png"
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+// import * as Icons from "react-icons/fa";
+import "./Navbar.css";
+import { navItems } from "./NavItems";
+import Dropdown from "./Dropdown";
 
-function Navigation() {
-  const [msg, setmsg] = useState("");
-  // const emailRef = useRef()
-  // const { resetPassword, currentUser } = useAuth()
-  // const [error, setError] = useState('')
-  // const [message, setMessage] = useState('')
-  // const [loading, setLoading] = useState(false)
-  // const history = useHistory()
-
-  // async function handleSubmit(e) {
-  //     e.preventDefault()
-
-  //     try {
-  //         setMessage('')
-  //         setError('')
-  //         setLoading(true)
-  //         await resetPassword(emailRef.current.value)
-  //         setMessage('Check your inbox for further instructions')
-  //         //history.push('/dashboard')
-  //     } catch {
-  //         console.log(error)
-  //         setError('Failed to reset the password')
-  //     }
-
-  //     setLoading(false)
-
-  // }
+function Navbar() {
+  const [dropdown, setDropdown] = useState(false);
 
   return (
     <>
-      <Navbar variant="light" className="navbarcss">
-        <a href="/" className="brand marg1">
-          OneGene
-        </a>
-        <Nav className="mr-auto marg1">
-          <Nav.Link className="pad1" href="/">Home</Nav.Link>
-          <Nav.Link className="pad1" href="/about">About</Nav.Link>
-          <Nav.Link className="pad1" href="/istatus">Inventory Status</Nav.Link>
-          <Nav.Link className="pad1" href="/stock">Safety Stock</Nav.Link>
-          <Nav.Link className="pad1" href="/data">Data</Nav.Link>
-          {/* <Nav.Link href="/help">Help</Nav.Link> */}
-        </Nav>
-        <img className="image2 marg1" src={logo} />
-      </Navbar>
+      <nav className="navbar">
+        <Link to="/" className="navbar-logo">
+          ONEGENE
+          {/* <Icons.FaTree /> */}
+        </Link>
+        <ul className="nav-items">
+          {navItems.map((item) => {
+            if (item.title === "Inventory Status") {
+              return (
+                <li
+                  key={item.id}
+                  className={item.cName}
+                  onMouseEnter={() => setDropdown(true)}
+                  onMouseLeave={() => setDropdown(false)}
+                >
+                  <Link to={item.path}>{item.title}</Link>
+                  {dropdown && <Dropdown />}
+                </li>
+              );
+            }
+            return (
+              <li key={item.id} className={item.cName}>
+                <Link to={item.path}>{item.title}</Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </>
   );
 }
 
-export default Navigation;
+export default Navbar;

@@ -1,103 +1,63 @@
-import React, { useState } from "react";  
-import { read, utils, writeFile } from 'xlsx';
+import React, { useState, useEffect } from "react";
+import Papa from "papaparse";
 import Navigation from "./Navbar";
 
 const Data = () => {
-    const [movies, setMovies] = useState([]);
+  const [data, setData] = useState([]);
 
-    const handleImport = ($event) => {
-        const files = $event.target.files;
-        if (files.length) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const wb = read(event.target.result);
-                const sheets = wb.SheetNames;
+  useEffect(() => {
+    const csvFilePath = require("./masbom.csv");
 
-                if (sheets.length) {
-                    const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
-                    setMovies(rows)
-                }
-            }
-            reader.readAsArrayBuffer(file);
-        }
-    }
+    Papa.parse(csvFilePath, {
+      header: true,
+      download: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        setData(results.data);
+      },
+    });
+  }, []);
 
-    const handleExport = () => {
-        const headings = [[
-            'Movie',
-            'Category',
-            'Director',
-            'Rating'
-        ]];
-        const wb = utils.book_new();
-        const ws = utils.json_to_sheet([]);
-        utils.sheet_add_aoa(ws, headings);
-        utils.sheet_add_json(ws, movies, { origin: 'A2', skipHeader: true });
-        utils.book_append_sheet(wb, ws, 'Report');
-        writeFile(wb, 'Movie Report.xlsx');
-    }
-
-    return (
-        <>
-        <Navigation />
-            <div className="row mb-2 mt-5">
-                <div className="col-sm-6 offset-3">
-                    <div className="row">
-                        <div className="col-md-6">
-                            <div className="input-group">
-                                <div className="custom-file">
-                                    <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required onChange={handleImport}
-                                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
-                                    <label className="custom-file-label" htmlFor="inputGroupFile">Choose file</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <button onClick={handleExport} className="btn btn-primary float-right">
-                                Export <i className="fa fa-download"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="row">
-                <div className="col-sm-6 offset-3">
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">Movie</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Director</th>
-                                <th scope="col">Rating</th>
-                            </tr>
-                        </thead>
-                        <tbody> 
-                                {
-                                    movies.length
-                                    ?
-                                    movies.map((movie, index) => (
-                                        <tr key={index}>
-                                            <th scope="row">{ index + 1 }</th>
-                                            <td>{ movie.Movie }</td>
-                                            <td>{ movie.Category }</td>
-                                            <td>{ movie.Director }</td>
-                                            <td><span className="badge bg-warning text-dark">{ movie.Rating }</span></td>
-                                        </tr> 
-                                    ))
-                                    :
-                                    <tr>
-                                        <td colSpan="5" className="text-center">No Data Found.</td>
-                                    </tr> 
-                                }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </>
-
-    );
+  return (
+    <>
+      <Navigation />
+      <h2 className="heading pad4">Master BOM Data</h2>
+      <div className="row">
+        <div className="col-sm-12">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">S.No</th>
+                <th scope="col">Main Item Group</th>
+                <th scope="col">Item Code</th>
+                <th scope="col">Item</th>
+                <th scope="col">Item Type</th>
+                <th scope="col">Subgroup</th>
+                <th scope="col">RM Item Code</th>
+                <th scope="col">RM Item Name</th>
+                <th scope="col">Req Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>{item["S.No"]}</td>
+                  <td>{item["Main Item Group"]}</td>
+                  <td>{item["Item Code"]}</td>
+                  <td>{item["Item"]}</td>
+                  <td>{item["Item Type"]}</td>
+                  <td>{item["Subgroup"]}</td>
+                  <td>{item["RM Item Code"]}</td>
+                  <td>{item["RM Item Name"]}</td>
+                  <td>{item["Req Qty"]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Data;

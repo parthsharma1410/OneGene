@@ -1,91 +1,53 @@
-import React from "react";
-import "../App.css";
+import React, { useState, useEffect } from "react";
+import Papa from "papaparse";
 import Navigation from "./Navbar";
-import mainpage from "../onegene.png";
 
-export default function SafetyStock() {
+const SafetyStock = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const csvFilePath = require("./safetystock.csv");
+
+    Papa.parse(csvFilePath, {
+      header: true,
+      download: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        setData(results.data);
+      },
+    });
+  }, []);
+
   return (
-    <div className="container">
+    <>
       <Navigation />
-      <div className="flexbox">
-        <div className="textcolumn animate__animated animate__fadeIn">
-          <h2 className="heading pad1">Safety Stock</h2>
-          <h4 className="headig2">Part Code: <b>HC830HSUAB05</b></h4>
-          <p className="para">Average Lead Time: <b>28 Days</b></p>
-          <p className="para">Max Lead Time: <b>30 Days</b></p>
-          <div>
-  <table>
-    <tr>
-      <th>Month</th>
-      <th>Forecasted Requirement</th>
-      <th>Actual Requirement</th>
-    </tr>
-    <tr>
-      <td>January</td>
-      <td>2687</td>
-      <td>2730</td>
-    </tr>
-    <tr>
-      <td>February</td>
-      <td>2201</td>
-      <td>2190</td>
-    </tr>
-    <tr>
-      <td>March</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>April</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>May</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>June</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>July</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>August</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>September</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>October</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>Nivember</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-    <tr>
-      <td>December</td>
-      <td>1364</td>
-      <td>1260</td>
-    </tr>
-  </table></div>
-        </div>
-        <div className="imagecolumn animate__animated animate__fadeIn animate__delay-1s">
-          <img className="image1 marg3" src={mainpage} />
+      <h2 className="heading pad4">Safety Stock</h2>
+      <div className="row">
+        <div className="col-sm-12">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Item Code</th>
+                <th scope="col">Item</th>
+                <th scope="col">Monthly</th>
+                <th scope="col">Yearly</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>{item["Item Code"]}</td>
+                  <td>{item["Item"]}</td>
+                  <td>{item["Monthly"]}</td>
+                  <td>{item["Yearly"]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>
+    </>
   );
-}
+};
+
+export default SafetyStock;

@@ -64,6 +64,10 @@
   margin-top: 10%;
 }
 
+.pad4 {
+  margin-left: 8%;
+}
+
 .image1 {
   width: 120%;
 }
@@ -90,3 +94,5 @@ th, td {
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
+
+
